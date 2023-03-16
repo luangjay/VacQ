@@ -4,8 +4,9 @@ const cookieParser = require('cookie-parser')
 const connectdb = require('./config/db')
 
 // Route files
-const hospitals = require('./routes/hospitals.js')
 const auth = require('./routes/auth')
+const hospitals = require('./routes/hospitals')
+const appointments = require('./routes/appointments')
 
 // Load env vars
 dotenv.config({ path: './config/config.env' })
@@ -34,8 +35,9 @@ app.get('/', (req, res) => {
 })
 
 // Mount routers
-app.use('/api/v1/hospitals', hospitals)
 app.use('/api/v1/auth', auth)
+app.use('/api/v1/hospitals', hospitals)
+app.use('/api/v1/appointments', appointments)
 
 const PORT = process.env.PORT || 5000
 
