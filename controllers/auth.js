@@ -44,7 +44,11 @@ exports.login = async (req, res, next) => {
   }
 
   // Check for user
-  const user = await User.findOne({ email }).select('password')
+  const user = await User.findOne({ email }).select({
+    password: 1,
+    name: 1, // for frontend
+    email: 1, // for frontend
+  })
   if (!user) {
     return res.status(400).json({
       success: false,
@@ -85,10 +89,17 @@ const sendTokenResponse = (user, statusCode, res) => {
   if (process.env.NODE_ENV === 'production') {
     options.secure = true
   }
-  res.status(statusCode).cookie('token', token, options).json({
-    success: true,
-    token,
-  })
+  res
+    .status(statusCode) /*.cookie('token', token, options)*/
+    .json({
+      success: true,
+      //add for frontend
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      //end for frontend
+      token,
+    })
 }
 
 // @desc    Get current logged in user
